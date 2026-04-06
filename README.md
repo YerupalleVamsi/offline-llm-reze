@@ -1,53 +1,256 @@
-# 🎉 Single Port Setup Complete!
+# � Offline LLM with Reze Avatar
 
-## What Changed?
-You no longer need multiple ports. Everything runs on **port 8000**.
+A full-stack application featuring an offline LLM with voice interaction, OCR capabilities, and an animated avatar interface. Everything runs locally on a single port with no internet required.
 
-- ✅ No more "failed to fetch" errors
-- ✅ No CORS issues  
-- ✅ Simple one-command startup
-- ✅ Production-ready
+**Repository:** [YerupalleVamsi/offline-llm-reze](https://github.com/YerupalleVamsi/offline-llm-reze)
 
 ---
 
-## 🚀 How to Run
+## ✨ Features
 
-### Windows Users
-**Just double-click:**
+- 🤖 **Offline LLM Chat** - Run large language models locally
+- 🎤 **Voice Input** - Speech-to-text using Whisper (offline)
+- 🖼️ **OCR Support** - Extract text from images with EasyOCR
+- 🧍 **Animated Avatar** - Interactive 3D avatar (Reze character)
+- 🎨 **Modern UI** - React + Vite frontend
+- 🔒 **Privacy First** - Everything runs on your machine, no external API calls
+- ⚡ **Single Port** - No complex setup, runs entirely on port 8000
+
+---
+
+## 📋 Prerequisites
+
+- **Python 3.10+** (for backend)
+- **Node.js 16+** (for frontend)
+- **FFmpeg** (required for audio processing)
+- **Git**
+
+### Install FFmpeg
+
+**Windows:**
+```bash
+# Using Chocolatey
+choco install ffmpeg
+
+# Or using Scoop
+scoop install ffmpeg
 ```
+
+**macOS:**
+```bash
+brew install ffmpeg
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get install ffmpeg
+```
+
+---
+
+## 🚀 Quick Start
+
+### Option 1: Automated Setup (Recommended)
+
+**Windows:**
+```bash
+# Just double-click this file in your project folder:
 RUN_UNIFIED.bat
 ```
 
-### Linux/Mac Users
-**Run this command:**
+**Linux/macOS:**
 ```bash
 bash run-unified.sh
 ```
 
+This will:
+1. ✅ Install all Python dependencies
+2. ✅ Install Node.js packages
+3. ✅ Build the frontend
+4. ✅ Start the backend server
+
+### Option 2: Manual Setup
+
+**1. Clone and navigate to the project:**
+```bash
+git clone https://github.com/YerupalleVamsi/offline-llm-reze.git
+cd offline-llm-reze
+```
+
+**2. Set up the backend:**
+```bash
+cd backend
+pip install -r requirements.txt
+cd ..
+```
+
+**3. Set up the frontend:**
+```bash
+cd frontend
+npm install
+npm run build
+cd ..
+```
+
+**4. Run the server:**
+```bash
+# On Windows
+python backend/app/main.py
+
+# On Linux/macOS
+python3 backend/app/main.py
+```
+
 ---
 
-## What This Does
+## 🌐 Access the Application
 
-1. Installs all dependencies (first time only)
-2. Builds the frontend into optimized production files
-3. Starts the backend server on port 8000
-4. Backend serves both the UI and API
+Once the backend is running, open your browser and go to:
 
----
-
-## 📱 Once Running
-
-Open your browser to:
 ```
 http://localhost:8000
 ```
 
 You'll see:
-- Chat interface
-- Microphone/file upload options
-- All API features working
+- 💬 Chat interface
+- 🎤 Microphone input for voice chat
+- 📤 File upload for OCR
+- 🧍 Animated avatar responding to your messages
 
 ---
+
+## 📁 Project Structure
+
+```
+offline-llm-reze/
+├── backend/
+│   ├── app/
+│   │   ├── main.py              # FastAPI server & routes
+│   │   ├── db.py                # Database management
+│   │   ├── memory.py            # Chat history
+│   │   ├── utils.py             # Utility functions
+│   │   ├── routes/
+│   │   │   ├── chat.py          # Chat endpoint
+│   │   │   ├── ocr_route.py     # OCR endpoint
+│   │   │   └── speech_route.py  # Speech recognition
+│   │   ├── services/
+│   │   │   ├── llm.py           # LLM interface
+│   │   │   ├── ocr.py           # OCR service
+│   │   │   └── speech.py        # Speech service
+│   │   └── schemas/
+│   │       └── chat.py          # Pydantic models
+│   ├── requirements.txt          # Python dependencies
+│   └── data/                     # SQLite database
+│
+├── frontend/
+│   ├── public/
+│   │   └── avatar/              # Avatar assets
+│   ├── src/
+│   │   ├── components/
+│   │   │   └── ChatBox.jsx      # Main chat ui
+│   │   ├── pages/
+│   │   │   └── Home.jsx         # Home page
+│   │   ├── services/
+│   │   │   └── api.js           # API calls
+│   │   └── App.jsx              # Root component
+│   ├── package.json
+│   └── vite.config.js
+│
+├── avatar/                       # Avatar model files
+│   ├── main.js
+│   ├── index.html
+│   └── reze__stylized_anime_girl.glb
+│
+└── README.md
+```
+
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **FastAPI** - Modern web framework
+- **Uvicorn** - ASGI server
+- **Whisper** - Speech-to-text
+- **EasyOCR** - Optical character recognition
+- **PyTorch** - Deep learning
+- **Transformers** - LLM models
+- **SQLite** - Database
+
+### Frontend
+- **React 19** - UI framework
+- **Vite** - Build tool
+- **CSS3** - Styling
+
+### Avatar
+- **three.js** or **Babylon.js** - 3D rendering
+- **GLB format** - 3D model
+
+---
+
+## 🔧 Troubleshooting
+
+### Port 8000 Already in Use
+```bash
+# Find what's using port 8000
+# Windows:
+netstat -ano | findstr :8000
+
+# Linux/Mac:
+lsof -i :8000
+
+# Kill the process and restart
+```
+
+### Dependencies Not Installing
+```bash
+# Update pip
+python -m pip install --upgrade pip
+
+# Try installing with requirements again
+pip install -r backend/requirements.txt
+```
+
+### Avatar Not Loading
+- Ensure `public/avatar/` folder contains the `.glb` model file
+- Check browser console for loading errors
+
+### Whisper/Speech Not Working
+- Verify FFmpeg is installed: `ffmpeg -version`
+- Add FFmpeg to your system PATH
+
+---
+
+## 📚 API Endpoints
+
+- **POST** `/api/chat` - Send a message and get LLM response
+- **POST** `/api/ocr` - Upload image for text extraction
+- **POST** `/api/speech` - Convert speech to text
+
+---
+
+## 📝 License
+
+[Add your license here]
+
+---
+
+## 👨‍💻 Author
+
+Created by: YerupalleVamsi
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs
+- Suggest features
+- Submit pull requests
+
+---
+
+**Enjoy your offline AI assistant! 🚀**
 
 ## 🔍 Verify Everything Works
 
