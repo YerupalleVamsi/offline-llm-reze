@@ -1,0 +1,152 @@
+# Manual Single-Port Setup (If You Prefer Step-by-Step)
+
+If you don't want to use `RUN_UNIFIED.bat`, here are the exact steps:
+
+---
+
+## Step 1: Install Frontend Dependencies
+
+```cmd
+cd frontend
+npm install --legacy-peer-deps
+```
+
+Wait for it to complete (might take 1-2 minutes).
+
+---
+
+## Step 2: Build Frontend
+
+```cmd
+npm run build
+```
+
+This creates a `frontend/dist` folder with optimized production files.
+
+You should see:
+```
+vite v8.0.1 building for production...
+✓ 29 modules transformed.
+dist/index.html                    2.46 kB │ gzip:   1.05 kB
+dist/assets/main-abc1234.css       5.60 kB │ gzip:   1.70 kB
+dist/assets/main-def5678.js       45.23 kB │ gzip:  15.30 kB
+✓ built in 12.34s
+```
+
+---
+
+## Step 3: Install Backend Dependencies
+
+```cmd
+cd ../backend
+python -m pip install -r requirements.txt
+```
+
+Wait for all packages to install.
+
+**Optional:** Verify FFmpeg is installed:
+```cmd
+ffmpeg -version
+```
+
+If it's not found, download from: https://ffmpeg.org/download.html
+
+---
+
+## Step 4: Start the Backend
+
+Stay in the `backend` folder and run:
+
+```cmd
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+You should see:
+```
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started server process [12345]
+INFO:     Waiting for application startup.
+Starting up...
+Database initialized
+INFO:     Application startup complete
+Mounting static files from D:\testing shit\frontend\dist
+```
+
+---
+
+## Step 5: Open in Browser
+
+Open your browser and go to:
+```
+http://localhost:8000
+```
+
+You should see the chat interface!
+
+---
+
+## Verification
+
+Check these all work:
+
+1. **Frontend:** http://localhost:8000 (chat interface)
+2. **Health Check:** http://localhost:8000/health (should show `{"status":"ok",...}`)
+3. **API Docs:** http://localhost:8000/docs (interactive API documentation)
+
+---
+
+## Testing Audio
+
+1. Open http://localhost:8000
+2. Select language (Hindi, English, etc.)
+3. Click microphone icon to record OR upload an audio file
+4. Should transcribe to text within a few seconds
+
+If you see errors, check:
+- Backend logs in the terminal
+- Browser console (F12 → Console tab)
+- That FFmpeg is installed
+
+---
+
+## Stopping
+
+Press `Ctrl+C` in the backend terminal to stop.
+
+---
+
+## Next Time
+
+You can just run `RUN_UNIFIED.bat` from the root folder - it does all these steps automatically!
+
+---
+
+## Troubleshooting
+
+### "Module not found: app.db"
+You're not in the backend folder. Do:
+```cmd
+cd backend
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+### "Port 8000 already in use"
+Kill the process using port 8000 or use a different port:
+```cmd
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8001
+```
+
+Then access at: http://localhost:8001
+
+### "frontend/dist not found"
+You didn't build the frontend. Run from frontend folder:
+```cmd
+cd frontend
+npm run build
+```
+
+### Audio processing fails
+FFmpeg not installed. Download from: https://ffmpeg.org/download.html
+
+### "Failed to fetch" in browser
+The backend isn't responding. Check that the uvicorn command is running and not showing errors.

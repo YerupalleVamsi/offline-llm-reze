@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="color-scheme" content="dark">
+  <title>Avatar</title>
+  <style>
+    :root {
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.42);
+      --line: rgba(255, 255, 255, 0.1);
+      --fill: rgba(255, 255, 255, 0.06);
+      --accent: #8ab4f8;
+      --accent-dim: rgba(138, 180, 248, 0.22);
+      --radius: 16px;
+      --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #0a0a0c;
+      font-family: var(--font);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    #canvas-container { position: absolute; inset: 0; z-index: 1; }
+    #ui-root {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      padding: 12px 14px max(14px, env(safe-area-inset-bottom));
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    #ui-root > * { pointer-events: auto; }
+
+    .panel {
+      background: rgba(22, 22, 26, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .panel-composer { padding: 14px 16px 16px; }
+
+    #textInput {
+      width: 100%;
+      min-height: 64px;
+      max-height: 120px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: var(--fill);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15px;
+      line-height: 1.45;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    #textInput:focus {
+      border-color: var(--accent-dim);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    #textInput::placeholder { color: var(--muted); }
+
+    .btn-send {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #0d0d0f;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.12s;
+    }
+    .btn-send:hover:not(:disabled) { opacity: 0.92; }
+    .btn-send:active:not(:disabled) { transform: scale(0.99); }
+    .btn-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    #status {
+      margin-top: 8px;
+      min-height: 16px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .panel-settings { padding: 4px 0 8px; }
+    .settings-title {
+      padding: 10px 16px 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .row {
+      padding: 8px 16px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+    .row:last-child { border-bottom: none; padding-bottom: 14px; }
+    .row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .row select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      background: #2a2a30;
+      color: #f1f3f4;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      outline: none;
+      color-scheme: dark;
+      -webkit-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e8eaed' d='M1.41 0 6 4.58 10.59 0 12 1.41l-6 6-6-6z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+    }
+    .row select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-dim);
+    }
+    .row select option,
+    .row select optgroup {
+      background-color: #2a2a30;
+      color: #f1f3f4;
+    }
+
+    #loading {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: #0a0a0c;
+      transition: opacity 0.4s;
+    }
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loadingText { font-size: 13px; color: var(--muted); }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="loading">
+    <div class="spinner"></div>
+    <div id="loadingText">Loading…</div>
+  </div>
+  <div id="canvas-container"></div>
+
+  <div id="ui-root">
+    <div class="panel panel-composer">
+      <textarea id="textInput" rows="2" placeholder="Ask in this panel, or use chat on the left — audio plays here."></textarea>
+      <button type="button" class="btn-send" id="askSpeakBtn">Ask &amp; speak</button>
+      <div id="status"></div>
+    </div>
+
+    <div class="panel panel-settings">
+      <div class="settings-title">Voice &amp; language</div>
+      <div class="row">
+        <label for="responseLang">Language</label>
+        <select id="responseLang">
+          <option value="auto" selected>Auto (match voice)</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+          <option value="it">Italiano</option>
+          <option value="pt">Português</option>
+          <option value="hi">हिन्दी</option>
+          <option value="ar">العربية</option>
+          <option value="ru">Русский</option>
+          <option value="ja">日本語</option>
+          <option value="ko">한국어</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+      <div class="row">
+        <label for="voiceSelect">Voice</label>
+        <select id="voiceSelect"></select>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="main.js"></script>
+</body>
+</html>

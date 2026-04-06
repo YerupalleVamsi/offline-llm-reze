@@ -1,0 +1,246 @@
+# ✅ SETUP COMPLETE - Single Port (8000) Implementation
+
+## What Was Done
+
+Your application now runs on a **single port (8000)** instead of multiple ports.
+
+### Changes Made:
+
+**1. Backend (backend/app/main.py)**
+   - ✅ Added code to serve frontend files
+   - ✅ Frontend (`dist/` folder) is mounted at root `/`
+   - ✅ API endpoints remain at `/api/*`
+   - ✅ Everything runs on port 8000
+
+**2. Frontend (frontend/src/services/api.js)**
+   - ✅ Simplified API configuration
+   - ✅ Now uses relative paths `/api/*`
+   - ✅ No proxy configuration needed
+   - ✅ Works automatically on same port
+
+**3. Build Configuration (frontend/vite.config.js)**
+   - ✅ Removed proxy configuration
+   - ✅ Simplified to just React plugin
+   - ✅ Cleaner, faster setup
+
+**4. Startup Scripts**
+   - ✅ `RUN_UNIFIED.bat` (Windows one-click start)
+   - ✅ `run-unified.sh` (Linux/Mac one-click start)
+   - ✅ Automatic build + server startup
+
+**5. Documentation**
+   - ✅ `README.md` - Overview and quick links
+   - ✅ `QUICK_START.txt` - 30-second guide
+   - ✅ `UNIFIED_SETUP.md` - Complete reference
+   - ✅ `MANUAL_SETUP.txt` - Step-by-step instructions
+   - ✅ `CHANGES_SUMMARY.md` - What changed and why
+   - ✅ `CHECK_SETUP.bat` - Environment validation
+
+---
+
+## 🚀 How to Start
+
+### Instant Start (Easiest)
+Windows:
+```
+Double-click: RUN_UNIFIED.bat
+```
+
+Linux/Mac:
+```
+bash run-unified.sh
+```
+
+### What Happens
+1. ✅ Installs Node.js packages (first time only)
+2. ✅ Builds React frontend
+3. ✅ Installs Python packages (first time only)
+4. ✅ Starts FastAPI backend on port 8000
+
+### Then Open
+```
+http://localhost:8000
+```
+
+---
+
+## ✨ Benefits
+
+| Issue | Before | After |
+|-------|--------|-------|
+| **Failed to fetch** | ❌ Common | ✅ Fixed |
+| **CORS errors** | ❌ Frequent | ✅ None |
+| **Number of ports** | ❌ 2 (5173, 8000) | ✅ 1 (8000) |
+| **Startup complexity** | ❌ 2 terminals | ✅ 1 command |
+| **Production ready** | ❌ Hard to configure | ✅ Built-in |
+
+---
+
+## 📋 Checklist
+
+Before starting, verify:
+
+- [ ] Python 3.10+ installed (`python --version`)
+- [ ] Node.js 16+ installed (`node --version`)
+- [ ] Port 8000 is available
+- [ ] You're in the root directory (where `RUN_UNIFIED.bat` is)
+
+### Optional (for audio):
+- [ ] FFmpeg installed (download from https://ffmpeg.org/)
+
+---
+
+## 🎯 Testing
+
+**Once running**, verify each part works:
+
+### 1. Frontend Loads
+```
+Visit: http://localhost:8000
+Expected: Chat interface visible
+```
+
+### 2. Backend Responds
+```
+Visit: http://localhost:8000/health
+Expected: {"status":"ok","message":"..."}
+```
+
+### 3. API Docs Work
+```
+Visit: http://localhost:8000/docs
+Expected: Interactive API documentation
+```
+
+### 4. Audio Processing Works
+```
+- Click microphone icon
+- Record or upload audio
+- Should transcribe to text
+```
+
+---
+
+## 📚 Documentation Guide
+
+**Just starting?**
+→ Read: `QUICK_START.txt`
+
+**Want to understand changes?**
+→ Read: `CHANGES_SUMMARY.md`
+
+**Need detailed reference?**
+→ Read: `UNIFIED_SETUP.md`
+
+**Prefer manual steps?**
+→ Read: `MANUAL_SETUP.txt`
+
+**Having issues?**
+→ Run: `CHECK_SETUP.bat` then read terminal output
+
+---
+
+## 🔧 Advanced Options
+
+### Use Different Port
+Edit `RUN_UNIFIED.bat`:
+```batch
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8001
+```
+
+### Development (Separate Ports)
+If you want frontend dev server + backend separately:
+
+Terminal 1 (Backend on 8000):
+```bash
+cd backend
+python -m uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+Terminal 2 (Frontend dev on 5173):
+```bash
+cd frontend
+VITE_API_URL=http://127.0.0.1:8000 npm run dev
+```
+
+Then access: `http://localhost:5173`
+
+---
+
+## ❓ Common Questions
+
+**Q: Where are the frontend files served from?**
+A: From `frontend/dist/` folder (created by `npm run build`)
+
+**Q: Why do I need to build frontend?**
+A: The build creates optimized production files. The script does this automatically.
+
+**Q: Can I develop without building?**
+A: Yes, see "Development (Separate Ports)" above
+
+**Q: What if I close the terminal?**
+A: The server stops. Just run `RUN_UNIFIED.bat` again.
+
+**Q: Can I use port 8000 for something else?**
+A: Not while this app is running. Change the port in the script or close the other app.
+
+**Q: Do I need FFmpeg?**
+A: Only if you want audio processing. Without it, audio features won't work.
+
+---
+
+## 🆘 If Something Goes Wrong
+
+### Check 1: Is Backend Running?
+```
+Visit: http://localhost:8000/health
+Expected: {"status":"ok","message":"..."}
+If: Page doesn't load → Backend not running
+```
+
+### Check 2: Are Dependencies Installed?
+```
+Windows Terminal (in backend folder):
+pip install -r requirements.txt
+
+Windows Terminal (in frontend folder):
+npm install
+```
+
+### Check 3: Frontend Built?
+```
+If frontend/dist/ folder doesn't exist:
+cd frontend
+npm run build
+```
+
+### Check 4: Check Logs
+Terminal shows errors? Read them carefully:
+- "Module not found" → Missing dependency (npm install or pip install)
+- "Port in use" → Port 8000 in use (change port or kill other app)
+- "FFmpeg not found" → Install FFmpeg for audio
+
+---
+
+## 📞 Support
+
+All errors should be visible in the terminal where you ran the script.
+
+1. **Read the error message** - It usually tells you exactly what's wrong
+2. **Check the documentation files** - They cover common issues
+3. **Look at the logs** - Terminal shows detailed information
+
+If you see "Backend not responding", the issue is usually:
+- Backend process crashed (check errors in terminal)
+- Port 8000 in use (close other apps or use different port)
+- Frontend not built (run `npm run build` in frontend folder)
+
+---
+
+## ✅ All Done!
+
+You're ready to go! 
+
+**Next step:** Run `RUN_UNIFIED.bat` and open `http://localhost:8000`
+
+Enjoy your chat application! 🎉

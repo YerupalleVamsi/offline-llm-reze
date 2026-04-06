@@ -1,0 +1,15 @@
+# Floors chosen so Python 3.13 gets binary wheels (avoid building pydantic-core from Rust).
+fastapi>=0.115.0
+uvicorn>=0.30.0
+requests>=2.31.0
+pydantic>=2.10.0
+python-multipart>=0.0.9
+easyocr>=1.7.0
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+# Offline speech (Whisper + mT5); requires ffmpeg on PATH for browser WebM/MP3
+openai-whisper>=20231117
+torch>=2.0.0
+transformers>=4.36.0
+accelerate>=0.25.0

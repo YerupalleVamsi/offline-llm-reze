@@ -1,0 +1,128 @@
+.app-shell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: #f0f4f9;
+}
+
+.app-left {
+  width: 420px;
+  min-width: 260px;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  border-right: none;
+  background: #f0f4f9;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 0 0 rgba(60, 64, 67, 0.06);
+}
+
+.app-shell--resizing .app-left {
+  will-change: width;
+}
+
+body.app-split-dragging,
+body.app-split-dragging * {
+  cursor: col-resize !important;
+  user-select: none;
+}
+
+.split-handle {
+  flex: 0 0 5px;
+  width: 5px;
+  cursor: col-resize;
+  touch-action: none;
+  background: transparent;
+  align-self: stretch;
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
+}
+
+/* Wider invisible drag target, thin visible line */
+.split-handle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 11px;
+  margin-left: -5.5px;
+}
+
+.split-handle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: rgba(60, 64, 67, 0.18);
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+}
+
+.split-handle:hover::after,
+.split-handle:focus-visible::after {
+  background: rgba(11, 87, 208, 0.45);
+  box-shadow: 0 0 0 1px rgba(11, 87, 208, 0.2);
+}
+
+.app-shell--resizing .split-handle::after {
+  background: rgba(11, 87, 208, 0.55);
+  box-shadow: 0 0 0 2px rgba(11, 87, 208, 0.15);
+}
+
+.split-handle:focus-visible {
+  outline: none;
+}
+
+.split-handle:focus-visible::after {
+  outline: 2px solid #0b57d0;
+  outline-offset: 2px;
+}
+
+.app-right {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  position: relative;
+  background: #0d0d0f;
+}
+
+.avatar-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: #111116;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    flex-direction: column;
+  }
+
+  .app-left {
+    width: 100%;
+    min-width: unset;
+    max-width: none;
+    height: 48%;
+    border-right: 0;
+    border-bottom: 1px solid var(--apple-separator, rgba(0, 0, 0, 0.08));
+  }
+
+  .app-right {
+    height: 52%;
+  }
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}

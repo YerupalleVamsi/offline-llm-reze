@@ -1,0 +1,140 @@
+# QUICK START - Single Port (8000) Setup
+
+## 🚀 For Windows Users
+
+Simply **double-click** this file:
+```
+RUN_UNIFIED.bat
+```
+
+That's it! You'll see:
+- Console showing build progress
+- Backend starting
+- Message: "Frontend UI: http://localhost:8000"
+
+**Then open browser:** `http://localhost:8000`
+
+---
+
+## 🚀 For Linux/Mac Users
+
+Run this command:
+```bash
+bash run-unified.sh
+```
+
+Then open browser: `http://localhost:8000`
+
+---
+
+## What's Happening
+
+1. **Builds the frontend** (creates optimized production build)
+2. **Starts the backend** on port 8000
+3. **Backend serves the frontend** at `http://localhost:8000`
+4. **API endpoints** at `http://localhost:8000/api/*`
+
+Everything runs on **ONE port** - no more "failed to fetch" errors!
+
+---
+
+## ✅ Verification
+
+Once running, you should see:
+
+**In the terminal:**
+```
+INFO:     Uvicorn running on http://127.0.0.1:8000
+```
+
+**In your browser at http://localhost:8000:**
+- Chat interface loads
+- No CORS errors in console (F12)
+- Can record/upload audio successfully
+
+---
+
+## If Something Goes Wrong
+
+### "Command not found" (Linux/Mac)
+```bash
+chmod +x run-unified.sh
+bash run-unified.sh
+```
+
+### "Port 8000 already in use"
+Another app is using port 8000. Kill it:
+
+**Windows (PowerShell as admin):**
+```powershell
+Get-Process -Id (Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue).OwningProcess | Stop-Process -Force
+```
+
+**Linux/Mac:**
+```bash
+lsof -i :8000 | grep -v PID | awk '{print $2}' | xargs kill -9
+```
+
+### "npm: command not found"
+Install Node.js from https://nodejs.org/
+
+### "python: command not found"
+Install Python 3.10+ from https://python.org/
+
+### "FFmpeg not found" (Audio won't work)
+- **Windows:** Download from https://ffmpeg.org/download.html, add to PATH
+- **Mac:** `brew install ffmpeg`
+- **Linux:** `apt-get install ffmpeg`
+
+---
+
+## What Each File Does
+
+| File | Purpose |
+|------|---------|
+| `RUN_UNIFIED.bat` | Windows one-click start (builds + runs everything) |
+| `run-unified.sh` | Linux/Mac one-click start |
+| `UNIFIED_SETUP.md` | Detailed documentation |
+| `backend/app/main.py` | Serves frontend + API on port 8000 |
+| `frontend/dist/` | Built frontend files (created by npm run build) |
+
+---
+
+## Testing Each Part
+
+### Frontend Loaded?
+Open: `http://localhost:8000`
+Should see the chat interface
+
+### Backend Working?
+Open: `http://localhost:8000/health`
+Should see:
+```json
+{"status":"ok","message":"Backend is running and accessible"}
+```
+
+### API Docs?
+Open: `http://localhost:8000/docs`
+Should see interactive API documentation
+
+---
+
+## Next Steps
+
+1. **Run:** `RUN_UNIFIED.bat` (or `bash run-unified.sh`)
+2. **Wait:** Build and startup takes 1-2 minutes first time
+3. **Open:** `http://localhost:8000` in browser
+4. **Test:** Record audio or upload a file
+5. **Chat:** Type and enjoy! 🎉
+
+---
+
+## Need Help?
+
+Check the logs in the terminal window. Most errors show exactly what's wrong:
+- Missing dependencies → install with pip or npm
+- Port in use → kill the other process
+- FFmpeg missing → install it
+- Build errors → check Node.js version
+
+All output is logged to help diagnose issues!
