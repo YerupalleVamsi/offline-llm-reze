@@ -1,4 +1,4 @@
-# � Offline LLM with Reze Avatar
+#  Offline LLM with Reze Avatar
 
 A full-stack application featuring an offline LLM with voice interaction, OCR capabilities, and an animated avatar interface. Everything runs locally on a single port with no internet required.
 
